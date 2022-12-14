@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, inject } from 'vue';
 const isSubmitting = ref(false);
 const errors = reactive([]);
 
@@ -30,7 +30,7 @@ const handleSubmit = () => {
     }
     console.log(values);
 }
-
+//const value = inject("value:value");
 
 </script>
 

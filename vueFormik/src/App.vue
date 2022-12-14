@@ -1,6 +1,8 @@
 <script setup>
 import Formik from './components/lib/Formik.vue';
+import Field from './components/lib/Field.vue';
 import { ref, reactive } from 'vue';
+import Captcha from './components/lib/Captcha.vue';
 
 const validate = (values) => {
   const errors = {};
@@ -16,7 +18,9 @@ const validate = (values) => {
 
 const initialValues = reactive({
   email: '',
-  password: ''
+  password: '',
+  select: '',
+  captcha: null,
 });
 
 const onSubmit = (values, { setSubmitting }) => {
@@ -25,6 +29,7 @@ const onSubmit = (values, { setSubmitting }) => {
     setSubmitting(false);
   }, 400);
 }
+
 </script>
 
 <template>
@@ -33,9 +38,19 @@ const onSubmit = (values, { setSubmitting }) => {
 
   <main>
     <Formik :initialValues="initialValues" :validate="validate" :onSubmit="onSubmit"
-     v-slot="{ values, errors, handleSubmit, isSubmitting }">
+    v-slot="{ values, errors, handleSubmit, isSubmitting }">
+     <!--<template v-slot:default="{ values, errors, handleSubmit, isSubmitting }">-->
       <form @submit.prevent="handleSubmit">
-        <input type="text" />
+        <Field name="email" v-model="values.email"/>
+        <Field name="password" v-model="values.password" as="textarea" />
+        <Field name="select" v-model="values.select" as="select">
+          <template v-slot:options>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </template>
+        </Field>
+        <Field name="captcha" :as="Captcha" v-model="values.captcha"/>
         <button type="submit">Submit</button>
 
       </form>
