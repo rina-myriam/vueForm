@@ -1,9 +1,30 @@
 <script setup>
-import Field from './components/lib/Field.vue';
-import { ref } from 'vue';
-const name =  ref("test");
-const input = ref("Input");
-const modelValue = ref("test");
+import Formik from './components/lib/Formik.vue';
+import { ref, reactive } from 'vue';
+
+const validate = (values) => {
+  const errors = {};
+  if (!values.email) {
+    errors.email = 'Required';
+  } else if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+  ) {
+    errors.email = 'Invalid email address';
+  }
+  return errors;
+}
+
+const initialValues = reactive({
+  email: '',
+  password: ''
+});
+
+const onSubmit = (values, { setSubmitting }) => {
+  setTimeout(() => {
+    alert(JSON.stringify(values, null, 2));
+    setSubmitting(false);
+  }, 400);
+}
 </script>
 
 <template>
@@ -11,9 +32,14 @@ const modelValue = ref("test");
   </header>
 
   <main>
-    <Field :name="name" :dynamicComponent="input" v-model:value="modelValue" >
-      {{ value }}
-    </Field>
+    <Formik :initialValues="initialValues" :validate="validate" :onSubmit="onSubmit"
+     v-slot="{ values, errors, handleSubmit, isSubmitting }">
+      <form @submit.prevent="handleSubmit">
+        <input type="text" />
+        <button type="submit">Submit</button>
+
+      </form>
+    </Formik>
 
   </main>
 </template>
