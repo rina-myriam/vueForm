@@ -1,19 +1,20 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Field from './components/lib/Field.vue';
+import { ref } from 'vue';
+const name =  ref("test");
+const input = ref("Input");
+const modelValue = ref("test");
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
   </header>
 
   <main>
-    <TheWelcome />
+    <Field :name="name" :dynamicComponent="input" v-model:value="modelValue" >
+      {{ value }}
+    </Field>
+
   </main>
 </template>
 
