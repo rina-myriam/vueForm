@@ -10,6 +10,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { ref, provide } from 'vue';
+
+const field = ref(null)
+
 const value = ref('');
 
 defineProps({
@@ -22,5 +26,5 @@ defineProps({
         default: ''
     },
 });
-
+provide('field', field);
 </script>
