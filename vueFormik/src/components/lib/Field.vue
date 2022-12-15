@@ -25,7 +25,6 @@ const updateValue = (event) => {
 }
 
 const values = inject("globalValuesForm:values");
-
 </script>
 
 
@@ -38,7 +37,7 @@ const values = inject("globalValuesForm:values");
             <select v-else-if="as == 'select' ? true : false" :value="modelValue" @input="updateValue">
                 <slot name="options"></slot>
             </select>
-            <component v-else :is="as" v-bind="{ values }" />
+            <component v-else :is="as" v-bind="{ values: values[props.name] }" />
         </div>
     </slot>
 </template>

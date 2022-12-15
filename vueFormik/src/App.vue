@@ -6,25 +6,25 @@ import Captcha from './components/lib/Captcha.vue';
 import MyInput from './components/MyInput.vue';
 const validate = (values) => {
   const errors = {};
-  if (!values.value.email) {
+  if (!values.email) {
     errors.email = 'Required';
   } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.value.email)
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
   ) {
     errors.email = 'Invalid email address';
   }
-  if (!values.value.password) {
+  if (!values.password) {
     errors.password = 'Required';
-  } else if (values.value.password.length < 8) {
+  } else if (values.password.length < 8) {
     errors.password = 'Must be 8 characters or more';
   }
-  if (!values.value.select) {
+  if (!values.select) {
     errors.select = 'Required';
   }
-  if (!values.value.lastname || !values.value.firstname) {
+  if (!values.myInput.lastname || !values.myInput.firstname) {
     errors.myInput = 'Required';
   }
-  if (!values.value.captcha) {
+  if (!values.captcha.id) {
     errors.captcha = 'Required';
   }
   return errors;
@@ -34,9 +34,14 @@ const initialValues = reactive({
   email: '',
   password: '',
   select: '',
-  firstname: '',
-  lastname: '',
-  captcha: null,
+  myInput: {
+    firstname: '',
+    lastname: '',
+  },
+  captcha: {
+    id: '',
+    url: '',
+  },
 });
 
 const onSubmit = (values, { setSubmitting }) => {

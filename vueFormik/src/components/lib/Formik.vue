@@ -1,5 +1,5 @@
 <script setup>
-import { ref, provide } from 'vue';
+import { ref, provide, reactive } from 'vue';
 const isSubmitting = ref(false);
 const errors = ref({});
 
@@ -17,7 +17,7 @@ const props = defineProps({
         required: true
     },
 });
-const values = ref(props.initialValues);
+const values = reactive(props.initialValues);
 
 const setSubmitting = (value) => {
     isSubmitting.value = value;
