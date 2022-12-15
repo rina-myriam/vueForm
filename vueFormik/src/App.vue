@@ -3,15 +3,29 @@ import Formik from './components/lib/Formik.vue';
 import Field from './components/lib/Field.vue';
 import { ref, reactive } from 'vue';
 import Captcha from './components/lib/Captcha.vue';
-
+import MyInput from './components/MyInput.vue';
 const validate = (values) => {
   const errors = {};
-  if (!values.email) {
+  if (!values.value.email) {
     errors.email = 'Required';
   } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.value.email)
   ) {
     errors.email = 'Invalid email address';
+  }
+  if (!values.value.password) {
+    errors.password = 'Required';
+  } else if (values.value.password.length < 8) {
+    errors.password = 'Must be 8 characters or more';
+  }
+  if (!values.value.select) {
+    errors.select = 'Required';
+  }
+  if (!values.value.lastname || !values.value.firstname) {
+    errors.myInput = 'Required';
+  }
+  if (!values.value.captcha) {
+    errors.captcha = 'Required';
   }
   return errors;
 }
@@ -20,6 +34,8 @@ const initialValues = reactive({
   email: '',
   password: '',
   select: '',
+  firstname: '',
+  lastname: '',
   captcha: null,
 });
 
@@ -38,11 +54,12 @@ const onSubmit = (values, { setSubmitting }) => {
 
   <main>
     <Formik :initialValues="initialValues" :validate="validate" :onSubmit="onSubmit"
-    v-slot="{ values, errors, handleSubmit, isSubmitting }">
-     <!--<template v-slot:default="{ values, errors, handleSubmit, isSubmitting }">-->
+      v-slot="{ values, errors, handleSubmit, isSubmitting }">
       <form @submit.prevent="handleSubmit">
-        <Field name="email" v-model="values.email"/>
+        <Field name="email" v-model="values.email" />
+        <div :style="{ backgroundColor: errors.email ? 'red' : ''  }">{{ errors.email }}</div>
         <Field name="password" v-model="values.password" as="textarea" />
+        <div :style="{ backgroundColor: errors.password ? 'red' : ''  }">{{ errors.password }}</div>
         <Field name="select" v-model="values.select" as="select">
           <template v-slot:options>
             <option value="1">One</option>
@@ -50,9 +67,12 @@ const onSubmit = (values, { setSubmitting }) => {
             <option value="3">Three</option>
           </template>
         </Field>
-        <Field name="captcha" :as="Captcha" v-model="values.captcha"/>
+        <div :style="{ backgroundColor: errors.select ? 'red' : '' }">{{ errors.select }}</div>
+        <Field name="myInput" :as="MyInput"/>
+        <div :style="{ backgroundColor: errors.myInput ? 'red' : '' }">{{ errors.myInput }}</div>
+        <Field name="captcha" :as="Captcha"/>
+        <div :style="{ backgroundColor: errors.captcha ? 'red' : ''  }">{{ errors.captcha }}</div>
         <button type="submit">Submit</button>
-
       </form>
     </Formik>
 

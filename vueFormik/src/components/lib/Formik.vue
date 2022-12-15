@@ -1,7 +1,7 @@
 <script setup>
-import { ref, reactive, inject } from 'vue';
+import { ref, provide } from 'vue';
 const isSubmitting = ref(false);
-const errors = reactive([]);
+const errors = ref({});
 
 const props = defineProps({
     initialValues: {
@@ -17,20 +17,19 @@ const props = defineProps({
         required: true
     },
 });
-const values = reactive(props.initialValues);
+const values = ref(props.initialValues);
 
 const setSubmitting = (value) => {
     isSubmitting.value = value;
 }
 
 const handleSubmit = () => {
-    errors.push(props.validate(values));
-    if (errors.length === 0) {
+    errors.value = props.validate(values);
+    if (errors.value.length === 0) {
         props.onSubmit(values, setSubmitting);
     }
-    console.log(values);
 }
-//const value = inject("value:value");
+provide("globalValuesForm:values", values);
 
 </script>
 

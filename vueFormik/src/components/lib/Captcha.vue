@@ -1,7 +1,7 @@
 <script setup>
-defineProps({
+const props = defineProps({
  
-  value: {
+  values: {
     type: Object,
   },
 });
@@ -9,6 +9,9 @@ const options = Array.from({ length: 9 }, (_, i) => ({
   id: i,
   href: `https://picsum.photos/200?random=${i}`,
 }));
+const updateValue = (option) => {
+    props.values.captcha = option;
+};
 </script>
 
 <template>
@@ -18,8 +21,8 @@ const options = Array.from({ length: 9 }, (_, i) => ({
       alt="Captcha"
       v-for="option in options"
       :key="option.id"
-      :class="{ selected: option.id === value?.id }"
-      @click="$emit('update:value', option)"
+      :class="{ selected: option.id === values.captcha?.id }"
+      v-on:click="updateValue(option)"
     />
   </div>
 </template>

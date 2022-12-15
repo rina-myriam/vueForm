@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { provide, inject, reactive, onUpdated } from 'vue';
 
 
 const props = defineProps({
@@ -12,31 +12,33 @@ const props = defineProps({
         default: 'input'
     },
     modelValue: {
-        type: String,
+        type: [String, Object],
         default: ''
     }
 });
 
-const model = reactive({});
 
-const isInput = props.as === 'input';
 const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (event) => {
     emit('update:modelValue', event.target.value)
 }
 
+const values = inject("globalValuesForm:values");
+
 </script>
 
 
 <template>
     <slot>
-        {{ name }}
-        <input v-if="as == 'input' ? true : false" :value="modelValue" @input="updateValue" />
-        <textarea v-else-if="as == 'textarea' ? true : false" :value="modelValue" @input="updateValue" ></textarea>
-        <select v-else-if="as == 'select' ? true : false" :value="modelValue" @input="updateValue" >
-            <slot name="options"></slot>
-        </select>
-        <component v-else :is="as" v-model="model"/>
+        <div>
+            {{ name }} :
+            <input v-if="as == 'input' ? true : false" :value="modelValue" @input="updateValue" />
+            <textarea v-else-if="as == 'textarea' ? true : false" :value="modelValue" @input="updateValue"></textarea>
+            <select v-else-if="as == 'select' ? true : false" :value="modelValue" @input="updateValue">
+                <slot name="options"></slot>
+            </select>
+            <component v-else :is="as" v-bind="{ values }" />
+        </div>
     </slot>
 </template>
